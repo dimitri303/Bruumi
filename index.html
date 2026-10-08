@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bruumi Dealer Hub</title>
+<style>
+  :root {
+    --navy: #0F1E2E;
+    --navy-2: #1C3247;
+    --teal: #2EB5A5;
+    --teal-soft: #E3F5F2;
+    --ink: #1A2733;
+    --muted: #5E6E7C;
+    --line: #DDE4EA;
+    --bg: #F4F7F9;
+    --card: #FFFFFF;
+    --amber: #B7791F;
+    --amber-soft: #FDF3E1;
+    --green: #2F855A;
+    --green-soft: #E6F4EC;
+    --blue: #2B6CB0;
+    --blue-soft: #E8F0FA;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .serif { font-family: Georgia, "Times New Roman", Times, serif; }
+
+  /* Top bar */
+  header {
+    background: var(--navy);
+    color: #F2F5F7;
+  }
+  .bar {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .brand { display: flex; align-items: baseline; gap: 12px; }
+  .brand .logo {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+    font-size: 22px;
+  }
+  .brand .product { color: #B8C4CF; font-style: italic; font-family: Georgia, serif; }
+  .user { display: flex; align-items: center; gap: 12px; font-size: 14px; color: #B8C4CF; }
+  .user strong { color: #F2F5F7; font-weight: normal; }
+  .avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--teal); color: var(--navy);
+    display: grid; place-items: center; font-weight: bold; font-size: 13px;
+  }
+  nav {
+    background: var(--navy-2);
+  }
+  nav ul {
+    max-width: 1120px; margin: 0 auto; padding: 0 24px;
+    list-style: none; display: flex; gap: 4px; overflow-x: auto;
+  }
+  nav li {
+    padding: 11px 14px; color: #B8C4CF; font-size: 14px; white-space: nowrap;
+    border-bottom: 3px solid transparent;
+  }
+  nav li.active { color: #F2F5F7; border-bottom-color: var(--teal); }
+
+  main { max-width: 1120px; margin: 0 auto; padding: 28px 24px 64px; }
+
+  .welcome { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+  .welcome h1 { margin: 0; font-family: Georgia, serif; font-weight: normal; font-size: 28px; }
+  .welcome p { margin: 4px 0 0; color: var(--muted); }
+  .dealer-tag {
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 14px; font-size: 13px; color: var(--muted);
+  }
+  .dealer-tag b { color: var(--ink); }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+  .tile .num { font-family: Georgia, serif; font-size: 30px; line-height: 1.1; }
+  .tile .lbl { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .tile.flag { border-left: 4px solid var(--amber); }
+
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: start; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+  .card h2 { margin: 0; padding: 16px 20px; font-family: Georgia, serif; font-weight: normal; font-size: 19px; border-bottom: 1px solid var(--line); }
+  .card .body { padding: 16px 20px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; font-weight: bold; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 20px; border-bottom: 1px solid var(--line); }
+  td { padding: 12px 20px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td .ref { font-weight: bold; }
+  td .sub { color: var(--muted); font-size: 13px; }
+  tr.highlight { background: #FFFBF3; }
+
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: bold; white-space: nowrap; }
+  .pill.referred { background: var(--amber-soft); color: var(--amber); }
+  .pill.approved { background: var(--green-soft); color: var(--green); }
+  .pill.review { background: var(--blue-soft); color: var(--blue); }
+  .pill.payout { background: var(--teal-soft); color: #1F7F73; }
+
+  .help p { margin: 0 0 12px; color: var(--muted); font-size: 14px; }
+  .help .hours { font-size: 13px; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 4px; }
+  .help .hours div { display: flex; justify-content: space-between; padding: 2px 0; }
+  .line { display: flex; justify-content: space-between; font-size: 14px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .line:last-child { border-bottom: 0; }
+  .line span:first-child { color: var(--muted); }
+
+  .notice { margin-top: 20px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 20px; font-size: 14px; color: var(--muted); }
+  .notice b { color: var(--ink); }
+
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 0 24px 32px; }
+
+  @media (max-width: 860px) {
+    .tiles { grid-template-columns: repeat(2, 1fr); }
+    .grid { grid-template-columns: 1fr; }
+    .hide-sm { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand">
+      <span class="logo">BRUUMI</span>
+      <span class="product">Dealer Hub</span>
+    </div>
+    <div class="user">
+      <div><strong>Tom Reynolds</strong><br>Northgate Motors, Leeds</div>
+      <div class="avatar">TR</div>
+    </div>
+  </div>
+  <nav>
+    <ul>
+      <li class="active">Applications</li>
+      <li>New proposal</li>
+      <li>Payouts</li>
+      <li>Documents</li>
+      <li>Support</li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <div class="welcome">
+    <div>
+      <h1>Good afternoon, Tom</h1>
+      <p>Here's where your customers' applications stand today.</p>
+    </div>
+    <div class="dealer-tag">Dealer <b>Northgate Motors</b> &middot; ID <b>DLR-0217</b></div>
+  </div>
+
+  <section class="tiles">
+    <div class="tile"><div class="num">7</div><div class="lbl">Applications in progress</div></div>
+    <div class="tile flag"><div class="num">1</div><div class="lbl">Referred, action needed</div></div>
+    <div class="tile"><div class="num">12</div><div class="lbl">Approved this month</div></div>
+    <div class="tile"><div class="num">3</div><div class="lbl">Payouts pending</div></div>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Recent applications</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Application</th>
+            <th class="hide-sm">Vehicle</th>
+            <th class="hide-sm">Monthly rental</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight">
+            <td><div class="ref">APP-104382</div><div class="sub">S. Thompson &middot; Ijarah lease, 48 months</div></td>
+            <td class="hide-sm">2023 Kia Niro EV</td>
+            <td class="hide-sm">&pound;389</td>
+            <td><span class="pill referred">Referred</span></td>
+          </tr>
+          <tr>
+            <td><div class="ref">APP-104377</div><div class="sub">D. Okafor &middot; Ijarah lease, 36 months</div></td>
+            <td class="hide-sm">2022 Toyota Corolla Hybrid</td>
+            <td class="hide-sm">&pound;312</td>
+            <td><span class="pill review">Under review</span></td>
+          </tr>
+          <tr>
+            <td><div class="ref">APP-104361</div><div class="sub">R. Hussain &middot; Ijarah lease, 48 months</div></td>
+            <td class="hide-sm">2024 Hyundai Kona Electric</td>
+            <td class="hide-sm">&pound;421</td>
+            <td><span class="pill approved">Approved</span></td>
+          </tr>
+          <tr>
+            <td><div class="ref">APP-104355</div><div class="sub">L. Bennett &middot; Ijarah lease, 24 months</div></td>
+            <td class="hide-sm">2021 Volkswagen Golf</td>
+            <td class="hide-sm">&pound;298</td>
+            <td><span class="pill payout">Payout pending</span></td>
+          </tr>
+          <tr>
+            <td><div class="ref">APP-104349</div><div class="sub">M. Ali &middot; Ijarah lease, 48 months</div></td>
+            <td class="hide-sm">2023 Skoda Enyaq</td>
+            <td class="hide-sm">&pound;455</td>
+            <td><span class="pill approved">Approved</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <aside>
+      <section class="card help">
+        <h2>Dealer Support</h2>
+        <div class="body">
+          <p>Questions about an application, a payout or a document? Use the chat icon to message Bruumi's Dealer Support team. Quote the application reference so we can help quickly.</p>
+          <div class="hours">
+            <div><span>Mon to Fri</span><span>08:30 to 18:00</span></div>
+            <div><span>Saturday</span><span>09:00 to 13:00</span></div>
+            <div><span>Dealer line</span><span>0113 000 0217</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:20px">
+        <h2>Your account</h2>
+        <div class="body">
+          <div class="line"><span>Dealership</span><span>Northgate Motors</span></div>
+          <div class="line"><span>Location</span><span>Leeds</span></div>
+          <div class="line"><span>Dealer ID</span><span>DLR-0217</span></div>
+          <div class="line"><span>Relationship manager</span><span>Bruumi Dealer Team</span></div>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <div class="notice"><b>Reminder:</b> Bruumi offers Sharia-compliant Ijarah leases. Please refer to monthly rentals and agreements in all customer conversations.</div>
+</main>
+
+<footer>Bruumi Limited &middot; Dealer Hub &middot; Demonstration page</footer>
+
+<script>
+  /* =========================================================
+     DEMO CONFIGURATION: edit these three values
+     Region values for UK orgs (London, euw2):
+       BOOTSTRAP_URL: https://apps.euw2.pure.cloud/genesys-bootstrap/genesys.min.js
+       ENVIRONMENT:   prod-euw2
+     Take both from your deployment's snippet in Admin > Message > Messenger Deployments.
+     ========================================================= */
+  var DEPLOYMENT_ID = 'REPLACE_DEPLOYMENT_ID';
+  var BOOTSTRAP_URL = 'https://apps.euw2.pure.cloud/genesys-bootstrap/genesys.min.js';
+  var ENVIRONMENT   = 'prod-euw2';
+
+  /* Dealer context sent to Genesys as Messenger custom attributes.
+     Read in the inbound message flow with Get Participant Data (same key names). */
+  var DEALER = {
+    dealerId: 'DLR-0217',
+    dealerName: 'Northgate Motors',
+    dealerContact: 'Tom Reynolds'
+  };
+
+  /* Reset helper: open the page with ?reset=1 to clear the stored Messenger
+     conversation before a run, then the page reloads clean. */
+  (function () {
+    if (new URLSearchParams(location.search).get('reset') === '1') {
+      try { localStorage.clear(); sessionStorage.clear(); } catch (e) {}
+      location.replace(location.pathname);
+    }
+  })();
+
+  /* Genesys Messenger snippet */
+  (function (g, e, n, es, ys) {
+    g['_genesysJs'] = e;
+    g[e] = g[e] || function () { (g[e].q = g[e].q || []).push(arguments); };
+    g[e].t = 1 * new Date();
+    g[e].c = es;
+    ys = document.createElement('script');
+    ys.async = 1; ys.src = n; ys.charset = 'utf-8';
+    document.head.appendChild(ys);
+  })(window, 'Genesys', BOOTSTRAP_URL, { environment: ENVIRONMENT, deploymentId: DEPLOYMENT_ID });
+
+  /* Set the dealer custom attributes as soon as the Database plugin is ready,
+     so they travel with Tom's first message. */
+  Genesys('subscribe', 'Database.ready', function () {
+    Genesys('command', 'Database.set', { messaging: { customAttributes: DEALER } },
+      function () { console.log('[Dealer Hub] Custom attributes set:', DEALER); },
+      function (err) { console.warn('[Dealer Hub] Database.set failed:', err); });
+  });
+</script>
+</body>
+</html>
