@@ -249,53 +249,5 @@
 
 <footer>Bruumi Limited &middot; Dealer Hub &middot; Demonstration page</footer>
 
-<script>
-  /* =========================================================
-     DEMO CONFIGURATION: edit these three values
-     Region values for UK orgs (London, euw2):
-       BOOTSTRAP_URL: https://apps.euw2.pure.cloud/genesys-bootstrap/genesys.min.js
-       ENVIRONMENT:   prod-euw2
-     Take both from your deployment's snippet in Admin > Message > Messenger Deployments.
-     ========================================================= */
-  var DEPLOYMENT_ID = 'REPLACE_DEPLOYMENT_ID';
-  var BOOTSTRAP_URL = 'https://apps.euw2.pure.cloud/genesys-bootstrap/genesys.min.js';
-  var ENVIRONMENT   = 'prod-euw2';
-
-  /* Dealer context sent to Genesys as Messenger custom attributes.
-     Read in the inbound message flow with Get Participant Data (same key names). */
-  var DEALER = {
-    dealerId: 'DLR-0217',
-    dealerName: 'Northgate Motors',
-    dealerContact: 'Tom Reynolds'
-  };
-
-  /* Reset helper: open the page with ?reset=1 to clear the stored Messenger
-     conversation before a run, then the page reloads clean. */
-  (function () {
-    if (new URLSearchParams(location.search).get('reset') === '1') {
-      try { localStorage.clear(); sessionStorage.clear(); } catch (e) {}
-      location.replace(location.pathname);
-    }
-  })();
-
-  /* Genesys Messenger snippet */
-  (function (g, e, n, es, ys) {
-    g['_genesysJs'] = e;
-    g[e] = g[e] || function () { (g[e].q = g[e].q || []).push(arguments); };
-    g[e].t = 1 * new Date();
-    g[e].c = es;
-    ys = document.createElement('script');
-    ys.async = 1; ys.src = n; ys.charset = 'utf-8';
-    document.head.appendChild(ys);
-  })(window, 'Genesys', BOOTSTRAP_URL, { environment: ENVIRONMENT, deploymentId: DEPLOYMENT_ID });
-
-  /* Set the dealer custom attributes as soon as the Database plugin is ready,
-     so they travel with Tom's first message. */
-  Genesys('subscribe', 'Database.ready', function () {
-    Genesys('command', 'Database.set', { messaging: { customAttributes: DEALER } },
-      function () { console.log('[Dealer Hub] Custom attributes set:', DEALER); },
-      function (err) { console.warn('[Dealer Hub] Database.set failed:', err); });
-  });
-</script>
 </body>
 </html>
